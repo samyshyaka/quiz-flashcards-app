@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Card {
+  cardId      Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  category    String
+  question    String
+  answer      String
+  postedBy    User?    @relation(fields: [postedById], references: [id])
+  postedById  Int? 
+  isDone      Boolean  @default(false)
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  cards     Card[]
+}
